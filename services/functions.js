@@ -1,6 +1,7 @@
 import arrayDataBase from "../database/arrayDb.js";
 import {nanoid} from 'nanoid'
-function CreatingNewIntelligenceReport(
+
+export function CreatingNewIntelligenceReport(
   id=nanoid(3),
   terroristName = "Muhammad — unknown last name",
   weapons,
@@ -19,7 +20,7 @@ function CreatingNewIntelligenceReport(
   return cnir;
 }
 
-function SavingReportintotheDB(reportObject) {
+export function SavingReportintotheDB(reportObject) {
     let idx
   if (arrayDataBase.length != 0) {
     idx = arrayDataBase.findIndex(
@@ -51,13 +52,13 @@ const cnir1 = {
   text: "very dengeres",
 };
 
-SavingReportintotheDB(cnir1);
+// SavingReportintotheDB(cnir1);
 
-function GettingAllReports() {
+export function GettingAllReports() {
   return arrayDataBase.sort((a, b) => a.id - b.id);
 }
 
-function GettingAllReportsSortedbyField(field) {
+export function GettingAllReportsSortedbyField(field) {
   const orderDb = arrayDataBase.sort(function (a, b) {
     if (a[field] < b[field]) {
       return -1; // a comes before b
@@ -70,7 +71,7 @@ function GettingAllReportsSortedbyField(field) {
   return orderDb;
 }
 
-function SearchingforReportbyID(id) {
+export function SearchingforReportbyID(id) {
   const idx = arrayDataBase.findIndex((report) => report.id === id);
   if (idx < 0) {
     throw new Error("report not exist");
@@ -78,7 +79,7 @@ function SearchingforReportbyID(id) {
   return arrayDataBase[idx];
 }
 
-function DeletingReportbyID(id) {
+export function DeletingReportbyID(id) {
   const idx = arrayDataBase.findIndex((report) => report.id === id);
   if (idx < 0) {
     throw new Error("report not exist");
@@ -86,24 +87,29 @@ function DeletingReportbyID(id) {
   arrayDataBase.splice(idx, 1);
 }
 // DeletingReportbyID(123)
-function EditingExistingReport(targetId, updates) {
-  const idx = arrayDataBase.findIndex((report) => report.id === targetId);
-  if (!idx) {
+export function EditingExistingReport(targetId, updates) {
+  let idx
+    idx = arrayDataBase.findIndex((report) => {
+    console.log(report.id,targetId)
+    return report.id === targetId
+}
+);
+  if (idx<0) {
     throw new Error("report not exist");
   }
-  const reportToUpdate = arrayDataBase[targetId];
+  const reportToUpdate = arrayDataBase[idx];
   Object.assign(reportToUpdate, updates);
   if (
     Object.keys(reportToUpdate).length >
-    Object.keys(arrayDataBase[targetId]).length
+    Object.keys(arrayDataBase[idx]).length
   ) {
     throw new Error(
       "there is updates contains keys that do not exist in a real report"
     );
   }
-  arrayDataBase[targetId] = reportToUpdate;
+  arrayDataBase[idx] = reportToUpdate;
 }
-console.log(arrayDataBase);
+// console.log(arrayDataBase);
 
 
 
